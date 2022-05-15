@@ -17,8 +17,12 @@ USER nix
 WORKDIR /home/nix
 
 # install nix and set environment
-RUN curl -L https://nixos.org/nix/install | sh
-RUN source /home/nix/.nix-profile/etc/profile.d/nix.sh
+RUN curl -L https://nixos.org/nix/install > install.sh
+RUN chmod +x install.sh
+RUN mkdir -p ~/.config/nix/
+RUN echo "sandbox = false" >> ~/.config/nix/nix.conf
+RUN ./install.sh --no-daemon
+RUN . /home/nix/.nix-profile/etc/profile.d/nix.sh
 ENV PATH /home/nix/.nix-profile/bin:$PATH
 ENV NIX_PATH /home/nix/.nix-defexpr/channels
 
